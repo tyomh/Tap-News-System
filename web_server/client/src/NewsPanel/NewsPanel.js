@@ -53,6 +53,9 @@ class NewsPanel extends React.Component {
     loadMoreNews() {
       let request = new Request('http://localhost:3000/news', {
         method: 'GET',
+        headers: {
+          'Authorization': 'bearer' + Auth.getToken(),
+        },
         cache: false
       });
 
