@@ -1,19 +1,24 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  news = [
-          {
-            'url':'http://www.google.com',
-            'title':"test",
-            'description':"test",
-            'source':'cnn',
-            'urlToImage':'https://www.google.com/search?tbm=isch&source=hp&biw=1513&bih=870&ei=iJGRW_aJAovysAWhg6C4DQ&q=k&oq=k&gs_l=img.3...1576.1576.0.1775.2.2.0.0.0.0.0.0..0.0....0...1ac.1.64.img..2.0.0.0...0.weJ8KPO2uto#imgrc=d9sP4Ch_9L2l-M:',
-            'digest':"3RjuEomJo2601syZbU70HA==",
-            'reason':"recommend"
-          }]
-    res.json(news);
+/* GET news page. */
+router.get('/userId/:userId/pageNum/:pageNum', function(req, res, next) {
+  console.log("Fetching news...");
+  user_id = req.params['userId'];
+  page_num = req.params['pageNum'];
+
+  rpc_client.getNewsSummariesForUser(user_id, page_num, function(response) {
+    res.json(response);
+  })
+});
+
+
+router.post('/userId/:userId/newsId/:newsId', function(req, res, next) {
+  console.log("Logging news click...");
+  user_id = req.params['userId'];
+  news_id = req.params['newsId'];
+  rpc_client.logNewsClickForUser(user_id, news_id);
+  res.status(200);
 });
 
 module.exports = router;
